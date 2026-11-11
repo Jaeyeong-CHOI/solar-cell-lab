@@ -155,6 +155,7 @@ footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
     <a href="#theory">이론</a>
     <a href="#kit">준비물</a>
     <a href="#circuit">회로 구성</a>
+    <a href="#multimeter">멀티미터 사용법</a>
     <a href="#safety">안전</a>
     <a href="#procedure">실험 순서</a>
     <a href="#lab" class="cta">측정값 입력·그래프</a>
@@ -308,7 +309,7 @@ footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
         <tbody>
           <tr><td><b>미니 태양전지판</b></td><td>3 V, 약 100 mA급, 케이스형</td><td>1개</td></tr>
           <tr><td><b>고정 저항 세트 (저항 카드)</b></td><td>10 kΩ, 4.7 kΩ, 2.2 kΩ, 1 kΩ, 470 Ω, 220 Ω, 100 Ω, 47 Ω, 22 Ω, 10 Ω — 값이 적힌 카드에 고정, 양끝 다리 2~3 cm 노출</td><td>10장</td></tr>
-          <tr><td><b>디지털 멀티미터</b></td><td>DC 전압 측정 (저항값 확인에도 사용)</td><td>1개</td></tr>
+          <tr><td><b>디지털 멀티미터</b></td><td>DC 전압 측정 (저항값 확인에도 사용) · <a href="#multimeter">사용법 보기</a></td><td>1개</td></tr>
           <tr><td><b>악어클립 집게전선</b></td><td>빨강 = (+), 검정 = (−)로 통일</td><td>6~8개</td></tr>
           <tr><td><b>광원</b></td><td>LED 스탠드 등 (실험 내내 같은 광원·같은 밝기 사용)</td><td>1개</td></tr>
           <tr><td><b>자 또는 줄자</b></td><td>30 cm 이상, 광원–태양전지 거리 측정</td><td>1개</td></tr>
@@ -376,7 +377,7 @@ footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
           <li>광원을 끄거나 태양전지를 손·종이로 <b>가린 상태</b>에서 시작합니다.</li>
           <li><b>빨간 집게선</b>: 태양전지 (+) → 저항 카드의 한쪽 다리 (접점 A)</li>
           <li><b>검은 집게선</b>: 저항 카드의 반대쪽 다리 (접점 B) → 태양전지 (−)</li>
-          <li>멀티미터를 <b>DC 전압(V⎓)</b> 모드로 놓고, 빨간 탐침을 A, 검은 탐침을 B에 댑니다. (저항과 <b>병렬</b>)</li>
+          <li>멀티미터를 <b>DC 전압(V⎓)</b> 모드로 놓고, 빨간 탐침을 A, 검은 탐침을 B에 댑니다. (저항과 <b>병렬</b>) 다이얼과 단자 위치는 <a href="#multimeter">멀티미터 사용법</a>을 보세요.</li>
           <li>집게 금속부끼리 닿지 않는지 확인한 뒤 광원을 켜고 값을 읽습니다.</li>
         </ol>
         <div class="note warn"><b>자주 하는 실수</b>멀티미터 탐침을 <b>전류(A, mA) 단자</b>에 꽂지 마세요. 전압 단자(V)만 사용합니다. 값이 음수(−)로 나오면 탐침의 빨강·검정이 반대로 닿은 것입니다.</div>
@@ -412,10 +413,121 @@ footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
   </div>
 </section>
 
+<!-- ================= 멀티미터 ================= -->
+<section id="multimeter">
+  <div class="wrap">
+    <span class="sec-no">STEP 4</span>
+    <h2>멀티미터 사용법 — 전압 재기</h2>
+    <p class="lead">멀티미터는 전압·전류·저항을 한 기기로 재는 계측기입니다. 오늘은 <b>직류 전압(V⎓)</b>만 재고, 저항 카드의 실제 값을 확인할 때 <b>저항(Ω)</b> 기능을 잠깐 씁니다. <b>전류(A) 기능은 쓰지 않습니다.</b></p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>멀티미터 살펴보기</h3>
+        <figure>
+          <svg viewBox="0 0 320 420" role="img" aria-label="디지털 멀티미터 그림: 위쪽 표시창, 가운데 다이얼은 직류 전압 20 범위, 아래 단자 중 COM에 검은 리드선, V옴 단자에 빨간 리드선이 꽂혀 있고 10A 단자는 비어 있음">
+            <rect x="55" y="8" width="210" height="352" rx="22" fill="#39414f"/>
+            <rect x="63" y="16" width="194" height="336" rx="16" fill="#f1c84b"/>
+            <rect x="80" y="30" width="160" height="58" rx="6" fill="#dfe6da" stroke="#39414f" stroke-width="2"/>
+            <text x="222" y="74" font-size="38" text-anchor="end" fill="#1d1d1b" font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700">2.31</text>
+            <text x="90" y="48" font-size="11" fill="#39414f" font-weight="700">DC</text>
+            <text x="230" y="48" font-size="11" text-anchor="end" fill="#39414f" font-weight="700">V</text>
+            <path d="M90.7 205.7 A70 70 0 0 1 122.9 136.6" fill="none" stroke="#2a78d6" stroke-width="9" stroke-linecap="round"/>
+            <path d="M183.9 130.2 A70 70 0 0 1 215.2 152.9" fill="none" stroke="#7a7972" stroke-width="9" stroke-linecap="round"/>
+            <path d="M228.5 181.4 A70 70 0 0 1 215.2 239.1" fill="none" stroke="#d93025" stroke-width="9" stroke-linecap="round"/>
+            <path d="M183.9 261.8 A70 70 0 0 1 104.8 239.1" fill="none" stroke="#1baf7a" stroke-width="9" stroke-linecap="round"/>
+            <circle cx="160" cy="196" r="52" fill="#39414f"/>
+            <circle cx="160" cy="196" r="44" fill="#4b5565"/>
+            <line x1="160" y1="196" x2="123.7" y2="179.1" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="160" cy="196" r="6" fill="#fff"/>
+            <text x="160.0" y="114.0" font-size="11" text-anchor="middle" fill="#1d1d1b">OFF</text>
+            <text x="72.1" y="203.1" font-size="12" text-anchor="middle" fill="#1d1d1b">2</text><text x="80.2" y="162.8" font-size="14" text-anchor="middle" fill="#1c5cab" font-weight="800">20</text><text x="105.8" y="130.7" font-size="12" text-anchor="middle" fill="#1d1d1b">200</text>
+            <text x="211.7" y="128.8" font-size="12" text-anchor="middle" fill="#1d1d1b">V~</text>
+            <text x="245.7" y="219.8" font-size="12" text-anchor="middle" fill="#1d1d1b">A</text>
+            <text x="181.3" y="285.4" font-size="11" text-anchor="middle" fill="#1d1d1b">200</text><text x="135.7" y="284.6" font-size="11" text-anchor="middle" fill="#1d1d1b">2k</text><text x="96.7" y="261.1" font-size="11" text-anchor="middle" fill="#1d1d1b">20k</text>
+            <text x="72" y="106" font-size="11.5" fill="#1c5cab" font-weight="800">V⎓ 직류</text>
+            <text x="250" y="262" font-size="11.5" text-anchor="end" fill="#0c6b49" font-weight="800">Ω 저항</text>
+            <g font-size="11" text-anchor="middle" font-weight="700" fill="#1d1d1b">
+              <circle cx="105" cy="318" r="13" fill="#1d1d1b"/><circle cx="105" cy="318" r="6" fill="#6b7280"/><text x="105" y="298">10A</text>
+              <circle cx="160" cy="318" r="13" fill="#1d1d1b"/><circle cx="160" cy="318" r="6" fill="#111"/><text x="160" y="298">COM</text>
+              <circle cx="215" cy="318" r="13" fill="#d93025"/><circle cx="215" cy="318" r="6" fill="#7a1710"/><text x="215" y="298">VΩmA</text>
+            </g>
+            <g stroke="#d93025" stroke-width="3" stroke-linecap="round"><line x1="93" y1="306" x2="117" y2="330"/><line x1="117" y1="306" x2="93" y2="330"/></g>
+            <path d="M160 318 V372 Q160 400 130 404 H4" fill="none" stroke="#1d1d1b" stroke-width="5" stroke-linecap="round"/>
+            <path d="M215 318 V372 Q215 400 245 404 H316" fill="none" stroke="#d93025" stroke-width="5" stroke-linecap="round"/>
+            <text x="4" y="394" font-size="11.5" fill="#1d1d1b" font-weight="700">검은 리드선</text>
+            <text x="316" y="394" font-size="11.5" text-anchor="end" fill="#d93025" font-weight="700">빨간 리드선</text>
+            <g font-size="13" font-weight="800" fill="#fff" text-anchor="middle">
+              <circle cx="26" cy="58" r="12" fill="#1c5cab"/><text x="26" y="62.5">1</text>
+              <circle cx="26" cy="196" r="12" fill="#1c5cab"/><text x="26" y="200.5">2</text>
+              <circle cx="26" cy="318" r="12" fill="#1c5cab"/><text x="26" y="322.5">3</text>
+            </g>
+            <g stroke="#1c5cab" stroke-width="1.5"><line x1="38" y1="58" x2="78" y2="58"/><line x1="38" y1="196" x2="60" y2="196"/><line x1="38" y1="318" x2="90" y2="318"/></g>
+          </svg>
+          <figcaption>기종마다 글자와 배치가 조금 다릅니다. 직류 전압은 <b>V⎓</b>, <b>DCV</b>, <b>V—</b> 중 하나로 적혀 있습니다.</figcaption>
+        </figure>
+        <ul class="clean">
+          <li><b>① 표시창</b> — 측정값이 숫자로 나옵니다.</li>
+          <li><b>② 다이얼(로터리 스위치)</b> — 무엇을, 어느 범위까지 잴지 고릅니다. 숫자는 그 범위에서 잴 수 있는 최댓값입니다.</li>
+          <li><b>③ 단자</b> — 리드선을 꽂는 곳입니다. <b>검은 선은 COM</b>, <b>빨간 선은 VΩ(또는 VΩmA)</b>에 꽂습니다.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>전압 재는 순서</h3>
+        <ol class="steps">
+          <li><b>리드선 꽂기</b>: 검은 리드선 → <b>COM</b>, 빨간 리드선 → <b>VΩ(mA)</b>. <b>10A 단자는 비워 둡니다.</b></li>
+          <li><b>다이얼 맞추기</b>: 직류 전압 구역(V⎓)의 <b>20</b>에 놓습니다. 태양전지 전압은 최대 3 V 정도라서 0~20 V 범위가 알맞습니다.</li>
+          <li><b>탐침 대기</b>: 빨간 탐침을 저항의 (+)쪽 다리(접점 A), 검은 탐침을 (−)쪽 다리(접점 B)에 댑니다. 저항과 <b>나란히(병렬)</b> 대는 것이고, 회로를 끊을 필요가 없습니다.</li>
+          <li><b>값 읽기</b>: 숫자가 1~2초 멈춘 뒤 읽습니다. 20 범위에서 <b>2.31</b>이면 2.31 V입니다.</li>
+          <li><b>3번 반복</b>: 탐침을 뗐다가 다시 대고 읽기를 세 번 합니다. 끝나면 다이얼을 <b>OFF</b>로 돌립니다.</li>
+        </ol>
+        <div class="note tip"><b>값이 0.2 V보다 작을 때</b>작은 저항(10~47 Ω)에서는 전압이 작게 나옵니다. 다이얼을 한 칸 낮은 <b>2</b>(또는 2000m) 범위로 돌리면 더 자세히 읽을 수 있습니다. 2000m 범위는 <b>mV</b>로 표시되므로 1000으로 나눠서 입력하세요 (211 → 0.211 V).</div>
+      </div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>표시창이 이렇게 나오면</h3>
+        <div class="scroll-x">
+        <table class="tbl">
+          <thead><tr><th>표시</th><th>뜻</th><th>해결</th></tr></thead>
+          <tbody>
+            <tr><td><b>1</b> (왼쪽 끝) 또는 <b>OL</b></td><td>고른 범위보다 큰 값</td><td>다이얼을 더 큰 범위로</td></tr>
+            <tr><td><b>−2.31</b> (음수)</td><td>빨강·검정 탐침이 반대</td><td>탐침을 서로 바꿔 대기</td></tr>
+            <tr><td><b>0.00</b></td><td>접촉이 안 됐거나 광원이 꺼짐</td><td>집게·탐침 접촉과 광원 확인</td></tr>
+            <tr><td>숫자가 계속 변함</td><td>접촉이 흔들리거나 빛이 변함</td><td>탐침을 꾹 대고 그림자 치우기</td></tr>
+            <tr><td>건전지 모양 표시</td><td>멀티미터 배터리 부족</td><td>선생님께 알리기</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:14.5px;color:var(--ink2)">다이얼에 숫자 없이 <b>V⎓</b>만 있는 자동 범위(AUTO) 멀티미터는 범위를 고를 필요가 없습니다. 표시창의 단위가 <b>V</b>인지 <b>mV</b>인지만 확인하세요.</p>
+      </div>
+      <div class="card">
+        <h3>저항 카드의 실제 값 확인하기</h3>
+        <p>저항에는 허용오차가 있어서 적힌 값과 실제 값이 조금 다릅니다. 시간이 되면 실제 값을 재서 입력표의 저항값 칸을 고쳐 보세요.</p>
+        <ol class="steps">
+          <li>저항 카드를 <b>회로에서 떼어 냅니다.</b> 회로에 연결된 채로는 재지 않습니다.</li>
+          <li>다이얼을 <b>Ω 구역</b>에서 예상 값보다 조금 큰 범위에 놓습니다. 10~100 Ω → <b>200</b>, 220 Ω~1 kΩ → <b>2k</b>, 2.2~10 kΩ → <b>20k</b>.</li>
+          <li>탐침을 저항 양쪽 다리에 댑니다. 빨강·검정 방향은 상관없습니다. 손가락으로 양쪽 다리를 함께 잡지 않습니다.</li>
+          <li>2k 범위에서 <b>.468</b>이면 0.468 kΩ = 468 Ω입니다.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="note warn"><b>멀티미터를 고장 내는 실수</b>빨간 리드선을 <b>10A(또는 mA) 단자</b>에 꽂거나 다이얼을 <b>전류(A) 구역</b>에 둔 채 태양전지에 대면, 멀티미터 안쪽이 거의 전선처럼 되어 태양전지가 단락되고 퓨즈가 끊어질 수 있습니다. 재기 전에 <b>단자와 다이얼 위치</b>를 조원끼리 한 번 더 확인하세요.</div>
+
+    <div class="card">
+      <h3>미리 연습해 보기</h3>
+      <p>실물을 만지기 전에 화면에서 다이얼을 돌리고 리드선을 대 보는 연습을 할 수 있습니다.</p>
+      <p><a class="btn" style="display:inline-block;text-decoration:none;background:var(--accent);border-color:var(--accent);color:#fff" href="https://javalab.org/ko/multimeter/" target="_blank" rel="noopener">자바실험실 멀티미터 시뮬레이션 열기 ↗</a></p>
+      <p style="font-size:14px;color:var(--muted)">외부 사이트(javalab.org)로 이동합니다. 시뮬레이션 화면의 멀티미터는 실험실 기기와 모양이 다를 수 있습니다.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ================= 안전 ================= -->
 <section id="safety">
   <div class="wrap">
-    <span class="sec-no">STEP 4</span>
+    <span class="sec-no">STEP 5</span>
     <h2>안전 수칙</h2>
     <p class="lead">전압이 낮아 감전 위험은 작지만, 아래 다섯 가지는 꼭 지켜 주세요.</p>
     <div class="card">
@@ -433,7 +545,7 @@ footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
 <!-- ================= 실험 순서 ================= -->
 <section id="procedure">
   <div class="wrap">
-    <span class="sec-no">STEP 5</span>
+    <span class="sec-no">STEP 6</span>
     <h2>실험 순서</h2>
     <p class="lead">모든 실험에서 <b>같은 저항 10개</b>를 <b>큰 값부터</b> 차례로 연결하고, 각 저항에서 전압을 <b>3번씩</b> 잽니다. 한 번에 <b>조건 하나만</b> 바꾸는 것이 핵심이에요(변인 통제).</p>
 
@@ -490,7 +602,7 @@ footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
 <!-- ================= 데이터 도구 ================= -->
 <section id="lab">
   <div class="wrap">
-    <span class="sec-no">STEP 6</span>
+    <span class="sec-no">STEP 7</span>
     <h2>측정값 입력 · 자동 계산 · 그래프</h2>
     <p class="lead">전압(V)만 입력하면 평균, 표준편차, 전류, 전력이 자동으로 계산되고 그래프가 그려집니다. 입력한 값은 <b>이 기기의 브라우저에만</b> 저장되며 다른 곳으로 전송되지 않습니다.</p>
 
@@ -555,7 +667,7 @@ footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
 <!-- ================= 해석 ================= -->
 <section id="think">
   <div class="wrap">
-    <span class="sec-no">STEP 7</span>
+    <span class="sec-no">STEP 8</span>
     <h2>결과 해석과 보고서</h2>
     <p class="lead">그래프를 그린 것으로 끝이 아닙니다. “왜 그런 모양이 나왔는가”를 설명해야 탐구가 됩니다.</p>
 
