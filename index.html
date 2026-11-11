@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>태양전지 I–V·P–V 실험실 — 최대전력점(MPP) 찾기</title>
+<meta name="description" content="태양전지의 I–V·P–V 곡선을 직접 측정하고 최대전력점(MPP)을 찾는 실험 안내와 측정값 입력·그래프 도구">
+<meta name="color-scheme" content="light">
+<style>
+:root{
+  --bg:#f6f5f1; --surface:#fcfcfb; --ink:#1d1d1b; --ink2:#4d4c47; --muted:#7a7972;
+  --line:#e2e0d8; --line2:#eeede7; --accent:#1c5cab; --accent-soft:#e8f1fd;
+  --warn-bg:#fff6df; --warn-line:#e9c46a; --tip-bg:#eaf6f0; --tip-line:#9fd3bb;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+  font-size:16px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3{line-height:1.3;margin:0}
+p{margin:.5em 0}
+a{color:var(--accent)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+header.hero{background:#10243f;color:#f3f6fb;padding:44px 0 36px}
+header.hero .kicker{font-size:14px;letter-spacing:.04em;color:#a9c4e8;font-weight:600}
+header.hero h1{font-size:clamp(26px,5vw,40px);margin:8px 0 12px;font-weight:800}
+header.hero p{color:#d5e0f0;max-width:44em;margin:0}
+.hero-steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;padding:0;list-style:none}
+.hero-steps li{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 14px;font-size:14px}
+nav.top{position:sticky;top:0;z-index:20;background:rgba(252,252,251,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+nav.top .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px;scrollbar-width:none}
+nav.top .wrap::-webkit-scrollbar{display:none}
+nav.top a{flex:none;text-decoration:none;color:var(--ink2);font-size:14.5px;font-weight:600;padding:7px 13px;border-radius:999px;white-space:nowrap}
+nav.top a:hover,nav.top a:focus-visible{background:var(--accent-soft);color:var(--accent)}
+nav.top a.cta{background:var(--accent);color:#fff}
+section{padding:44px 0 8px}
+section>.wrap>h2{font-size:clamp(22px,3.6vw,28px);font-weight:800;margin-bottom:6px}
+.sec-no{display:inline-block;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:4px}
+.lead{color:var(--ink2);margin:0 0 18px;max-width:46em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:14px 0}
+.card h3{font-size:18px;margin-bottom:8px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grid>.card{margin:0}
+.term{font-weight:800;color:var(--accent)}
+.formula{font-family:"Times New Roman",Georgia,serif;font-size:21px;background:var(--accent-soft);border-radius:10px;padding:10px 16px;margin:10px 0;text-align:center;font-style:italic}
+.formula small{font-family:inherit;font-style:normal;font-size:13px;color:var(--ink2);display:block;margin-top:2px}
+.note{border-radius:12px;padding:12px 16px;margin:14px 0;font-size:15px}
+.note.warn{background:var(--warn-bg);border:1px solid var(--warn-line)}
+.note.tip{background:var(--tip-bg);border:1px solid var(--tip-line)}
+.note b:first-child{display:block;margin-bottom:2px}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:8px 0}
+ol.steps>li{counter-increment:s;position:relative;padding:2px 0 12px 44px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:2px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+ul.clean{padding-left:1.2em;margin:6px 0}
+ul.clean li{margin:3px 0}
+table{border-collapse:collapse;width:100%}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;font-size:15px;vertical-align:top}
+.tbl th{font-size:13.5px;color:var(--ink2);font-weight:700;background:#f4f3ee}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+figure{margin:0}
+figcaption{font-size:14px;color:var(--ink2);margin-top:6px}
+svg text{font-family:inherit}
+.exp-tag{display:inline-block;font-size:12.5px;font-weight:700;border-radius:6px;padding:1px 8px;margin-right:6px;background:#eceae3;color:var(--ink2)}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:10px 0}
+details.q summary{cursor:pointer;font-weight:700}
+details.q p{color:var(--ink2);margin:.6em 0 0}
+
+/* ---------- 데이터 도구 ---------- */
+#lab{background:#eef2f7;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-bottom:44px;margin-top:36px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.toolbar .sp{flex:1}
+button,.btn{font:inherit;font-size:14.5px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:#bdbbb1}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.ghost{background:transparent}
+button.danger{color:#b3261e}
+input[type=text],input[type=number]{font:inherit;border:1px solid #cfcdc4;border-radius:8px;padding:7px 8px;background:#fff;color:var(--ink);width:100%;min-width:0}
+input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #8fb8f0;outline-offset:1px}
+.group-name{max-width:260px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:thin}
+.tabs button{flex:none;display:flex;align-items:center;gap:7px;border-radius:999px;padding:7px 14px;white-space:nowrap}
+.tabs button[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.tabs .cnt{font-size:12px;font-weight:600;opacity:.75}
+.cond-desc{font-size:15px;color:var(--ink2);margin:0 0 10px}
+.demo-banner{display:none;background:#fff6df;border:1px solid var(--warn-line);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px;align-items:center;gap:10px;flex-wrap:wrap}
+.demo-banner.on{display:flex}
+table.entry{min-width:720px}
+table.entry th,table.entry td{padding:6px 6px;border-bottom:1px solid var(--line2);font-size:14.5px;text-align:right;white-space:nowrap}
+table.entry th{font-size:12.5px;color:var(--ink2);font-weight:700;background:#f4f3ee;position:sticky;top:0}
+table.entry td.in{min-width:84px}
+table.entry td.in input{text-align:right;font-variant-numeric:tabular-nums}
+table.entry td.r input{width:92px;text-align:right}
+table.entry td.calc{font-variant-numeric:tabular-nums;color:var(--ink)}
+table.entry tr.mpp td{background:#fff3d6}
+table.entry tr.mpp td.calc.p{font-weight:800}
+table.entry tr.voc td{background:#f2f6fb}
+table.entry td.flag{text-align:left;font-size:12.5px;color:#9a5b00;white-space:normal;min-width:120px}
+.badge{display:inline-block;font-size:11.5px;font-weight:800;border-radius:5px;padding:0 6px;background:#f0b429;color:#3b2a00;margin-left:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin:14px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.stat .k{font-size:12.5px;color:var(--ink2);font-weight:700}
+.stat .v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.3}
+.stat .u{font-size:13px;color:var(--muted);font-weight:600;margin-left:3px}
+.stat .d{font-size:12px;color:var(--muted)}
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 10px;position:relative}
+.chart-card h3{font-size:16.5px;margin-bottom:2px}
+.chart-card .sub{font-size:13.5px;color:var(--ink2);margin:0 0 6px}
+.chart{width:100%;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 4px;font-size:14px}
+.legend label{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
+.legend label.empty{color:var(--muted);cursor:default}
+.legend input{width:auto;accent-color:var(--ink)}
+.tip-box{position:fixed;z-index:50;pointer-events:none;background:#1d1d1b;color:#fff;font-size:13px;line-height:1.5;border-radius:8px;padding:7px 10px;max-width:240px;opacity:0;transition:opacity .08s;font-variant-numeric:tabular-nums}
+.tip-box.on{opacity:1}
+.tip-box b{display:block}
+.empty-msg{color:var(--muted);font-size:14.5px;text-align:center;padding:38px 10px}
+.summary td.num,.summary th.num{text-align:right;font-variant-numeric:tabular-nums}
+.pos{color:#0b6b3a}.neg{color:#a23b1a}
+footer{padding:28px 0 44px;color:var(--muted);font-size:13.5px}
+@media (max-width:560px){
+  .card{padding:16px}
+  section{padding-top:34px}
+  .group-name{max-width:100%}
+}
+@media print{
+  nav.top,.toolbar,.tabs,.demo-banner,footer{display:none!important}
+  body{background:#fff} #lab{background:#fff}
+  .card,.chart-card{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">반도체 탐구 실험 · 태양전지</div>
+    <h1>태양전지는 언제 가장 큰 힘을 낼까?</h1>
+    <p>부하저항을 바꿔 가며 전압을 재고, I–V 곡선과 P–V 곡선을 직접 그려서 <b>최대전력점(MPP)</b>을 찾아봅니다. 빛과의 거리, 입사각, 그림자가 출력에 어떤 영향을 주는지도 비교해요.</p>
+    <ul class="hero-steps">
+      <li>① 원리 이해</li><li>② 회로 구성</li><li>③ 기준 조건 측정</li><li>④ 거리·각도·음영 비교</li><li>⑤ 그래프 분석</li>
+    </ul>
+  </div>
+</header>
+
+<nav class="top" aria-label="페이지 이동">
+  <div class="wrap">
+    <a href="#theory">이론</a>
+    <a href="#kit">준비물</a>
+    <a href="#circuit">회로 구성</a>
+    <a href="#safety">안전</a>
+    <a href="#procedure">실험 순서</a>
+    <a href="#lab" class="cta">측정값 입력·그래프</a>
+    <a href="#think">결과 해석</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= 이론 ================= -->
+<section id="theory">
+  <div class="wrap">
+    <span class="sec-no">STEP 1</span>
+    <h2>이론 배경 — 태양전지는 어떻게 전기를 만들까?</h2>
+    <p class="lead">공식을 외우기 전에, 태양전지 안에서 무슨 일이 일어나는지 먼저 그림으로 이해해 봅시다.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>빛 → 전기 (광전 변환)</h3>
+        <p>태양전지는 <b>p형 반도체와 n형 반도체를 붙인 p–n 접합</b>입니다. 접합면에는 전하를 한쪽으로 밀어 주는 <b>내부 전기장</b>이 생겨 있어요.</p>
+        <ol class="steps">
+          <li>빛(광자)이 반도체에 흡수되면 <b>전자–정공 쌍</b>이 만들어집니다.</li>
+          <li>내부 전기장이 전자는 n쪽으로, 정공은 p쪽으로 갈라놓습니다.</li>
+          <li>양쪽 단자를 도선과 저항으로 이으면 전자가 바깥 회로를 돌아 <b>전류</b>가 흐릅니다.</li>
+        </ol>
+        <p>빛이 셀수록 만들어지는 전자–정공 쌍이 많아져 <b>전류가 커집니다.</b></p>
+      </div>
+      <div class="card">
+        <figure>
+          <svg viewBox="0 0 420 250" role="img" aria-label="태양전지 단면: 빛이 들어와 전자와 정공이 n형과 p형으로 분리되고 외부 회로로 전류가 흐른다">
+            <rect x="60" y="70" width="230" height="46" fill="#cfe3fb" stroke="#1c5cab"/>
+            <rect x="60" y="116" width="230" height="70" fill="#fde2d4" stroke="#b5522a"/>
+            <line x1="60" y1="116" x2="290" y2="116" stroke="#1d1d1b" stroke-dasharray="5 4"/>
+            <text x="70" y="98" font-size="14" fill="#184f95" font-weight="700">n형</text>
+            <text x="70" y="172" font-size="14" fill="#8a3d1d" font-weight="700">p형</text>
+            <text x="296" y="120" font-size="12" fill="#4d4c47">p–n 접합</text>
+            <g stroke="#eda100" stroke-width="3" fill="none" stroke-linecap="round">
+              <path d="M120 14 L150 62"/><path d="M165 14 L195 62"/><path d="M210 14 L240 62"/>
+            </g>
+            <g fill="#eda100"><path d="M150 62l-9-5 6-4z"/><path d="M195 62l-9-5 6-4z"/><path d="M240 62l-9-5 6-4z"/></g>
+            <text x="252" y="30" font-size="13" fill="#7a5200" font-weight="700">빛 (광자)</text>
+            <circle cx="185" cy="96" r="9" fill="#1c5cab"/><text x="185" y="100.5" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">−</text>
+            <circle cx="185" cy="146" r="9" fill="#fff" stroke="#b5522a" stroke-width="2"/><text x="185" y="150.5" font-size="13" fill="#b5522a" text-anchor="middle" font-weight="700">+</text>
+            <path d="M200 92 h34" stroke="#1c5cab" stroke-width="2" marker-end="url(#ah1)"/>
+            <path d="M200 150 h34" stroke="#b5522a" stroke-width="2" marker-end="url(#ah2)"/>
+            <text x="126" y="100" font-size="12" fill="#184f95">전자</text>
+            <text x="126" y="150" font-size="12" fill="#8a3d1d">정공</text>
+            <path d="M290 84 H360 V120" stroke="#1d1d1b" stroke-width="2" fill="none"/>
+            <path d="M290 172 H360 V150" stroke="#1d1d1b" stroke-width="2" fill="none"/>
+            <rect x="348" y="120" width="24" height="30" fill="#fff" stroke="#1d1d1b" stroke-width="2"/>
+            <text x="360" y="140" font-size="12" text-anchor="middle" fill="#1d1d1b">R</text>
+            <text x="378" y="100" font-size="12" fill="#4d4c47">(−)</text>
+            <text x="378" y="176" font-size="12" fill="#4d4c47">(+)</text>
+            <text x="175" y="214" font-size="13" text-anchor="middle" fill="#4d4c47">전자가 바깥 회로(부하저항 R)를 돌며 일을 한다</text>
+            <defs>
+              <marker id="ah1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#1c5cab"/></marker>
+              <marker id="ah2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#b5522a"/></marker>
+            </defs>
+          </svg>
+          <figcaption>태양전지 단면을 단순하게 그린 그림 (실제 크기·비율과 다릅니다)</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>꼭 알아야 할 네 가지 용어</h3>
+      <div class="scroll-x">
+      <table class="tbl">
+        <thead><tr><th style="width:9.5em">용어</th><th>뜻</th><th>이 실험에서 구하는 방법</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">개방전압 V<sub>oc</sub></span></td><td>아무것도 연결하지 않았을 때(전류 0) 단자 사이의 전압. 태양전지가 낼 수 있는 <b>가장 큰 전압</b>.</td><td>부하 없이 멀티미터만 태양전지 양단에 대고 측정</td></tr>
+          <tr><td><span class="term">단락전류 I<sub>sc</sub></span></td><td>두 단자를 바로 이었을 때(전압 0) 흐르는 전류. 태양전지가 낼 수 있는 <b>가장 큰 전류</b>.</td><td>직접 단락하지 않고, <b>가장 작은 저항(10 Ω)</b>에서의 전류를 근삿값으로 사용</td></tr>
+          <tr><td><span class="term">최대전력점 MPP</span></td><td>전력 P = V × I 가 <b>가장 커지는 동작점</b>. 그때의 전압·전류를 V<sub>mp</sub>, I<sub>mp</sub>, 전력을 P<sub>max</sub>라고 합니다.</td><td>측정점 중 P가 가장 큰 점</td></tr>
+          <tr><td><span class="term">충전율 FF</span> <span class="exp-tag">심화</span></td><td>실제 최대전력이 V<sub>oc</sub>×I<sub>sc</sub>(이상적인 사각형)의 몇 %인지. 1에 가까울수록 곡선이 “네모”에 가깝습니다.</td><td>FF ≈ P<sub>max</sub> ÷ (V<sub>oc</sub> × I<sub>sc</sub>)</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>왜 저항을 바꿔 가며 잴까?</h3>
+        <p>태양전지는 건전지처럼 전압이 일정하지 않습니다. <b>연결한 부하저항 R에 따라 전압과 전류가 함께 바뀌어요.</b> 그래서 저항을 10 kΩ에서 10 Ω까지 바꾸며 여러 점을 찍으면 곡선 전체를 그릴 수 있습니다.</p>
+        <div class="formula">I = V / R<small>옴의 법칙 — 전압 V만 재면 전류 I를 계산할 수 있어요</small></div>
+        <div class="formula">P = V × I = V² / R<small>전력 — 태양전지가 저항에 공급하는 일률</small></div>
+        <p style="font-size:15px;color:var(--ink2)">단위 주의: 전류는 mA(= 0.001 A), 전력은 mW(= 0.001 W)로 나타내면 읽기 편합니다. 아래 입력 도구가 자동으로 계산해 줘요.</p>
+      </div>
+      <div class="card">
+        <h3>곡선은 어떤 모양일까? (예측)</h3>
+        <figure>
+          <svg viewBox="0 0 420 240" role="img" aria-label="I–V 곡선과 P–V 곡선의 일반적인 모양. I–V는 평평하다가 무릎에서 급히 떨어지고, P–V는 중간 전압에서 꼭짓점을 가진다">
+            <line x1="46" y1="200" x2="400" y2="200" stroke="#7a7972"/>
+            <line x1="46" y1="200" x2="46" y2="18" stroke="#7a7972"/>
+            <text x="400" y="220" font-size="12" text-anchor="end" fill="#4d4c47">전압 V →</text>
+            <text x="12" y="20" font-size="12" fill="#4d4c47">I, P</text>
+            <path d="M46 52 C190 54 290 58 318 96 C338 124 350 168 358 200" fill="none" stroke="#2a78d6" stroke-width="2.5"/>
+            <path d="M46 200 C140 146 240 70 300 62 C330 60 348 120 358 200" fill="none" stroke="#eb6834" stroke-width="2.5"/>
+            <circle cx="300" cy="62" r="6" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+            <circle cx="304" cy="80" r="6" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+            <line x1="300" y1="62" x2="300" y2="200" stroke="#7a7972" stroke-dasharray="4 4"/>
+            <text x="300" y="216" font-size="12" text-anchor="middle" fill="#1d1d1b" font-weight="700">Vmp</text>
+            <text x="358" y="216" font-size="12" text-anchor="middle" fill="#1d1d1b" font-weight="700">Voc</text>
+            <text x="52" y="44" font-size="12" fill="#1d1d1b" font-weight="700">Isc</text>
+            <text x="120" y="72" font-size="12.5" fill="#1c5cab" font-weight="700">I–V 곡선</text>
+            <text x="150" y="150" font-size="12.5" fill="#b5522a" font-weight="700">P–V 곡선</text>
+            <text x="252" y="48" font-size="12.5" fill="#1d1d1b" font-weight="700">MPP (Pmax)</text>
+            <text x="322" y="112" font-size="11.5" fill="#4d4c47">무릎점</text>
+          </svg>
+          <figcaption><b style="color:#1c5cab">I–V</b>: 전류가 거의 일정하다가 “무릎”에서 급격히 떨어짐 · <b style="color:#b5522a">P–V</b>: 양 끝은 0, 중간에서 최대</figcaption>
+        </figure>
+        <ul class="clean" style="font-size:15px">
+          <li><b>R이 아주 클 때</b> → 전류 거의 0, 전압은 V<sub>oc</sub>에 가까움 → P ≈ 0</li>
+          <li><b>R이 아주 작을 때</b> → 전류는 I<sub>sc</sub>에 가까움, 전압 거의 0 → P ≈ 0</li>
+          <li><b>그 사이 어딘가</b>에서 P가 최대 → 그 점이 MPP</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid g3">
+      <div class="card">
+        <h3>거리와 밝기</h3>
+        <p>광원에 가까울수록 태양전지에 닿는 빛(조도)이 세져 <b>전류와 P<sub>max</sub>가 커집니다.</b> 이상적인 점광원이라면 조도는 거리의 제곱에 반비례해요. 반면 V<sub>oc</sub>는 조금만 변합니다.</p>
+      </div>
+      <div class="card">
+        <h3>입사각</h3>
+        <p>빛이 비스듬히 들어오면 같은 빛이 더 넓은 면적에 퍼집니다. 이상적으로는 받는 빛이 <b>cos θ</b>에 비례해 줄어요 (30° → 약 87%, 60° → 50%). θ는 <b>태양전지 면의 법선과 빛의 진행 방향 사이 각도</b>입니다.</p>
+      </div>
+      <div class="card">
+        <h3>부분 음영</h3>
+        <p>셀 여러 개가 <b>직렬</b>로 이어진 패널에서는 가려진 셀 하나가 전체 전류를 막는 “병목”이 됩니다. 그래서 면적의 25%만 가려도 출력이 25%보다 훨씬 많이 줄 수 있어요.</p>
+      </div>
+    </div>
+
+    <details class="q">
+      <summary>예측해 보기 — 실험 전에 조원들과 답을 적어 두세요</summary>
+      <p>① 10개 저항 중 몇 Ω 근처에서 전력이 최대일까? ② 거리를 20 cm에서 10 cm로 줄이면 P<sub>max</sub>는 몇 배가 될까? ③ 입사각 60°에서 P<sub>max</sub>는 0°의 절반일까, 그보다 클까 작을까? — 실험 뒤 결과와 비교해 보고서에 쓰면 좋은 탐구 근거가 됩니다.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ================= 준비물 ================= -->
+<section id="kit">
+  <div class="wrap">
+    <span class="sec-no">STEP 2</span>
+    <h2>준비물</h2>
+    <p class="lead">조별로 아래 물품이 다 있는지 먼저 확인하세요.</p>
+    <div class="card">
+      <div class="scroll-x">
+      <table class="tbl">
+        <thead><tr><th>품목</th><th>규격·설명</th><th>조별 수량</th></tr></thead>
+        <tbody>
+          <tr><td><b>미니 태양전지판</b></td><td>3 V, 약 100 mA급, 케이스형</td><td>1개</td></tr>
+          <tr><td><b>고정 저항 세트 (저항 카드)</b></td><td>10 kΩ, 4.7 kΩ, 2.2 kΩ, 1 kΩ, 470 Ω, 220 Ω, 100 Ω, 47 Ω, 22 Ω, 10 Ω — 값이 적힌 카드에 고정, 양끝 다리 2~3 cm 노출</td><td>10장</td></tr>
+          <tr><td><b>디지털 멀티미터</b></td><td>DC 전압 측정 (저항값 확인에도 사용)</td><td>1개</td></tr>
+          <tr><td><b>악어클립 집게전선</b></td><td>빨강 = (+), 검정 = (−)로 통일</td><td>6~8개</td></tr>
+          <tr><td><b>광원</b></td><td>LED 스탠드 등 (실험 내내 같은 광원·같은 밝기 사용)</td><td>1개</td></tr>
+          <tr><td><b>자 또는 줄자</b></td><td>30 cm 이상, 광원–태양전지 거리 측정</td><td>1개</td></tr>
+          <tr><td><b>각도기·간이 지지대</b></td><td>입사각 0°, 30°, 60° 맞추기</td><td>1세트</td></tr>
+          <tr><td><b>검정 하드보드지·마스킹테이프</b></td><td>부분 음영(25% 가리기)과 장치 고정</td><td>공용</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="note tip"><b>역할을 나누면 빨라요</b>회로 연결 · 멀티미터 읽기 · 기록(이 사이트 입력) · 광원/거리/각도 조절 · 안전 점검 — 조원끼리 역할을 정하고, 조건이 바뀔 때 돌아가며 맡아 보세요.</div>
+  </div>
+</section>
+
+<!-- ================= 회로 ================= -->
+<section id="circuit">
+  <div class="wrap">
+    <span class="sec-no">STEP 3</span>
+    <h2>회로 구성 — 브레드보드 없이 집게전선으로</h2>
+    <p class="lead">회로는 단순합니다. <b>태양전지 – 부하저항</b>이 한 바퀴로 이어지고, <b>전압계(멀티미터)는 저항 양끝에 병렬</b>로 붙습니다.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>회로도</h3>
+        <figure>
+          <svg viewBox="0 0 440 290" role="img" aria-label="회로도: 태양전지 플러스 단자에서 빨간 선으로 저항 위쪽 접점 A에, 저항 아래쪽 접점 B에서 검은 선으로 태양전지 마이너스 단자에 연결. 전압계는 A와 B 사이에 병렬 연결">
+            <!-- wires -->
+            <path d="M80 110 V50 H250" fill="none" stroke="#d93025" stroke-width="3"/>
+            <path d="M100 190 V250 H250" fill="none" stroke="#1d1d1b" stroke-width="3"/>
+            <path d="M250 50 V100" fill="none" stroke="#d93025" stroke-width="3"/>
+            <path d="M250 200 V250" fill="none" stroke="#1d1d1b" stroke-width="3"/>
+            <path d="M250 50 H360 V120" fill="none" stroke="#d93025" stroke-width="2" stroke-dasharray="7 4"/>
+            <path d="M250 250 H360 V180" fill="none" stroke="#1d1d1b" stroke-width="2" stroke-dasharray="7 4"/>
+            <!-- solar cell -->
+            <rect x="40" y="110" width="80" height="80" rx="6" fill="#dbe9fb" stroke="#1c5cab" stroke-width="2"/>
+            <g stroke="#1c5cab" stroke-width="1"><line x1="60" y1="110" x2="60" y2="190"/><line x1="80" y1="110" x2="80" y2="190"/><line x1="100" y1="110" x2="100" y2="190"/><line x1="40" y1="137" x2="120" y2="137"/><line x1="40" y1="163" x2="120" y2="163"/></g>
+            <text x="36" y="210" font-size="13" fill="#1d1d1b" font-weight="700">태양전지</text>
+            <text x="88" y="103" font-size="16" fill="#d93025" font-weight="800">+</text>
+            <text x="108" y="208" font-size="16" fill="#1d1d1b" font-weight="800">−</text>
+            <!-- light -->
+            <g stroke="#eda100" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="128" x2="30" y2="136"/><line x1="4" y1="150" x2="30" y2="150"/><line x1="6" y1="172" x2="30" y2="164"/></g>
+            <text x="4" y="118" font-size="11.5" fill="#7a5200" font-weight="700">빛</text>
+            <!-- resistor card -->
+            <rect x="222" y="100" width="56" height="100" rx="5" fill="#fff8e6" stroke="#b08900" stroke-width="1.5"/>
+            <path d="M250 104 V116 l-9 6 18 10 -18 10 18 10 -18 10 18 10 -9 6 V196" fill="none" stroke="#1d1d1b" stroke-width="2"/>
+            <text x="212" y="146" font-size="13" text-anchor="end" fill="#1d1d1b" font-weight="700">부하저항 R</text>
+            <text x="212" y="162" font-size="11.5" text-anchor="end" fill="#4d4c47">(저항 카드)</text>
+            <!-- nodes -->
+            <circle cx="250" cy="50" r="5" fill="#d93025"/><circle cx="250" cy="250" r="5" fill="#1d1d1b"/>
+            <text x="250" y="38" font-size="13" text-anchor="middle" font-weight="800" fill="#1d1d1b">A</text>
+            <text x="250" y="272" font-size="13" text-anchor="middle" font-weight="800" fill="#1d1d1b">B</text>
+            <!-- voltmeter -->
+            <circle cx="360" cy="150" r="30" fill="#fff" stroke="#1d1d1b" stroke-width="2"/>
+            <text x="360" y="157" font-size="22" text-anchor="middle" font-weight="800" fill="#1d1d1b">V</text>
+            <text x="402" y="200" font-size="12.5" text-anchor="middle" fill="#1d1d1b" font-weight="700">멀티미터</text>
+            <text x="402" y="214" font-size="11.5" text-anchor="middle" fill="#4d4c47">(DC 전압, 병렬)</text>
+            <text x="150" y="42" font-size="12" text-anchor="middle" fill="#d93025" font-weight="700">빨간 집게선</text>
+            <text x="150" y="268" font-size="12" text-anchor="middle" fill="#1d1d1b" font-weight="700">검은 집게선</text>
+          </svg>
+          <figcaption>실선: 전류가 흐르는 길(태양전지 → 저항) · 점선: 멀티미터 탐침(A, B 두 접점에 병렬)</figcaption>
+        </figure>
+      </div>
+      <div class="card">
+        <h3>연결 순서</h3>
+        <ol class="steps">
+          <li>광원을 끄거나 태양전지를 손·종이로 <b>가린 상태</b>에서 시작합니다.</li>
+          <li><b>빨간 집게선</b>: 태양전지 (+) → 저항 카드의 한쪽 다리 (접점 A)</li>
+          <li><b>검은 집게선</b>: 저항 카드의 반대쪽 다리 (접점 B) → 태양전지 (−)</li>
+          <li>멀티미터를 <b>DC 전압(V⎓)</b> 모드로 놓고, 빨간 탐침을 A, 검은 탐침을 B에 댑니다. (저항과 <b>병렬</b>)</li>
+          <li>집게 금속부끼리 닿지 않는지 확인한 뒤 광원을 켜고 값을 읽습니다.</li>
+        </ol>
+        <div class="note warn"><b>자주 하는 실수</b>멀티미터 탐침을 <b>전류(A, mA) 단자</b>에 꽂지 마세요. 전압 단자(V)만 사용합니다. 값이 음수(−)로 나오면 탐침의 빨강·검정이 반대로 닿은 것입니다.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>장치 배치 (위에서 본 모습)</h3>
+      <figure>
+        <svg viewBox="0 0 640 200" role="img" aria-label="위에서 본 배치도: 광원과 태양전지 사이 거리 d, 태양전지 면의 법선과 빛의 방향 사이 각도 세타">
+          <circle cx="70" cy="100" r="22" fill="#ffe9a8" stroke="#eda100" stroke-width="2"/>
+          <text x="70" y="146" font-size="13" text-anchor="middle" font-weight="700" fill="#1d1d1b">LED 광원</text>
+          <g stroke="#eda100" stroke-width="2" stroke-dasharray="6 5"><line x1="96" y1="100" x2="300" y2="100"/></g>
+          <path d="M300 100 l-10 -5 v10z" fill="#eda100"/>
+          <line x1="96" y1="62" x2="318" y2="62" stroke="#4d4c47"/><line x1="96" y1="56" x2="96" y2="68" stroke="#4d4c47"/><line x1="318" y1="56" x2="318" y2="68" stroke="#4d4c47"/>
+          <text x="207" y="52" font-size="13" text-anchor="middle" fill="#1d1d1b" font-weight="700">거리 d = 10 / 20 / 30 cm</text>
+          <rect x="314" y="62" width="9" height="76" fill="#2a78d6"/>
+          <text x="318" y="160" font-size="13" text-anchor="middle" font-weight="700" fill="#1d1d1b">입사각 0°</text>
+          <text x="318" y="178" font-size="11.5" text-anchor="middle" fill="#4d4c47">빛이 면에 수직</text>
+          <!-- tilted -->
+          <g stroke="#eda100" stroke-width="2" stroke-dasharray="6 5"><line x1="400" y1="100" x2="520" y2="100"/></g>
+          <path d="M520 100 l-10 -5 v10z" fill="#eda100"/>
+          <g transform="rotate(30 530 100)"><rect x="526" y="62" width="9" height="76" fill="#2a78d6"/><line x1="530" y1="100" x2="460" y2="100" stroke="#1d1d1b" stroke-width="1.5"/></g>
+          <path d="M490 100 A40 40 0 0 0 495.4 80" fill="none" stroke="#1d1d1b" stroke-width="1.5"/>
+          <text x="474" y="88" font-size="14" fill="#1d1d1b" font-weight="800">θ</text>
+          <text x="452" y="62" font-size="11.5" fill="#4d4c47">법선(면에 수직인 선)</text>
+          <text x="530" y="160" font-size="13" text-anchor="middle" font-weight="700" fill="#1d1d1b">입사각 θ = 30°, 60°</text>
+          <text x="530" y="178" font-size="11.5" text-anchor="middle" fill="#4d4c47">태양전지를 돌려서 맞춤</text>
+        </svg>
+        <figcaption>광원과 태양전지의 <b>중심 높이를 같게</b> 맞추고, 거리는 광원 앞면에서 태양전지 면까지 자로 잽니다.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 안전 ================= -->
+<section id="safety">
+  <div class="wrap">
+    <span class="sec-no">STEP 4</span>
+    <h2>안전 수칙</h2>
+    <p class="lead">전압이 낮아 감전 위험은 작지만, 아래 다섯 가지는 꼭 지켜 주세요.</p>
+    <div class="card">
+      <ul class="clean">
+        <li><b>집게전선끼리 직접 잇지 않기</b> — 태양전지를 단락시키지 말고 반드시 부하저항을 사이에 둡니다.</li>
+        <li><b>저항을 바꿀 때는 광원을 끄거나 태양전지를 가리기</b> — 그다음 집게를 옮깁니다.</li>
+        <li><b>큰 저항 → 작은 저항 순서</b>(10 kΩ → 10 Ω)로 측정합니다.</li>
+        <li><b>작은 저항은 뜨거워질 수 있어요</b> — 측정 직후 바로 만지지 않습니다.</li>
+        <li><b>LED 스탠드의 열과 강한 빛</b>을 정면으로 오래 보지 말고, 바닥에 늘어진 전선에 걸리지 않게 정리합니다.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 실험 순서 ================= -->
+<section id="procedure">
+  <div class="wrap">
+    <span class="sec-no">STEP 5</span>
+    <h2>실험 순서</h2>
+    <p class="lead">모든 실험에서 <b>같은 저항 10개</b>를 <b>큰 값부터</b> 차례로 연결하고, 각 저항에서 전압을 <b>3번씩</b> 잽니다. 한 번에 <b>조건 하나만</b> 바꾸는 것이 핵심이에요(변인 통제).</p>
+
+    <div class="card">
+      <h3><span class="exp-tag">예비</span>회로 점검</h3>
+      <ol class="steps">
+        <li>광원과 태양전지를 <b>거리 20 cm, 입사각 0°</b>로 고정합니다.</li>
+        <li>부하 없이 멀티미터만 태양전지 양단에 대고 <b>개방전압 V<sub>oc</sub></b>를 읽어 봅니다.</li>
+        <li>대표 저항 3개(예: 10 kΩ, 470 Ω, 10 Ω)로 전압이 <b>점점 작아지는지</b> 확인합니다. 작아지지 않으면 집게 접촉을 다시 확인하세요.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3><span class="exp-tag">실험 1</span>기준 조건의 I–V·P–V 곡선 (거리 20 cm · 입사각 0°)</h3>
+      <ol class="steps">
+        <li>부하 없이 V<sub>oc</sub>를 3회 측정해 입력합니다.</li>
+        <li>10 kΩ → 4.7 kΩ → 2.2 kΩ → 1 kΩ → 470 Ω → 220 Ω → 100 Ω → 47 Ω → 22 Ω → 10 Ω 순으로 저항 카드를 바꾸며 전압을 3회씩 잽니다.</li>
+        <li>아래 <a href="#lab">입력 도구</a>의 <b>‘기준’ 탭</b>에 값을 넣으면 I, P가 자동 계산되고 그래프가 그려집니다.</li>
+        <li>P가 가장 큰 점이 <b>MPP</b>입니다. V<sub>mp</sub>, I<sub>mp</sub>, P<sub>max</sub>를 확인하세요.</li>
+      </ol>
+      <div class="note tip"><b>측정 팁</b>값이 계속 흔들리면 집게가 헐거운 것입니다. 다시 물리고 2~3초 기다린 뒤 읽으세요. 3회 측정은 “집게를 뗐다가 다시 연결”하거나 “광원을 껐다 켠 뒤” 읽어야 반복 측정의 의미가 있습니다.</div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3><span class="exp-tag">실험 2</span>거리(조도) 변화</h3>
+        <p>입사각은 0°로 고정하고 <b>거리만</b> 바꿉니다.</p>
+        <ul class="clean">
+          <li>거리 <b>10 cm</b> → ‘거리 10 cm’ 탭에 입력</li>
+          <li>거리 20 cm → 실험 1의 기준 데이터를 그대로 사용</li>
+          <li>거리 <b>30 cm</b> → ‘거리 30 cm’ 탭에 입력</li>
+        </ul>
+        <p style="color:var(--ink2);font-size:15px">각 거리에서 V<sub>oc</sub>와 저항 10개를 같은 방법으로 측정합니다.</p>
+      </div>
+      <div class="card">
+        <h3><span class="exp-tag">실험 3</span>입사각 변화</h3>
+        <p>거리는 20 cm로 고정하고 <b>각도만</b> 바꿉니다.</p>
+        <ul class="clean">
+          <li>입사각 0° → 실험 1의 기준 데이터를 그대로 사용</li>
+          <li>입사각 <b>30°</b> → ‘입사각 30°’ 탭에 입력</li>
+          <li>입사각 <b>60°</b> → ‘입사각 60°’ 탭에 입력</li>
+        </ul>
+        <p style="color:var(--ink2);font-size:15px">태양전지를 돌릴 때 <b>중심 위치와 거리</b>가 변하지 않게 주의하세요.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="exp-tag">선택</span>부분 음영 (시간이 남으면)</h3>
+      <p>거리 20 cm · 입사각 0°에서 검정 하드보드지로 태양전지 면적의 <b>약 25%</b>를 가리고 같은 측정을 반복합니다. → ‘25% 음영’ 탭에 입력. 어느 쪽 가장자리를 가렸는지(가로/세로)도 메모해 두면 분석에 도움이 됩니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 데이터 도구 ================= -->
+<section id="lab">
+  <div class="wrap">
+    <span class="sec-no">STEP 6</span>
+    <h2>측정값 입력 · 자동 계산 · 그래프</h2>
+    <p class="lead">전압(V)만 입력하면 평균, 표준편차, 전류, 전력이 자동으로 계산되고 그래프가 그려집니다. 입력한 값은 <b>이 기기의 브라우저에만</b> 저장되며 다른 곳으로 전송되지 않습니다.</p>
+
+    <div class="toolbar">
+      <input class="group-name" id="groupName" type="text" placeholder="조 이름 (예: 2조)" aria-label="조 이름" maxlength="30">
+      <span class="sp"></span>
+      <button id="btnDemo" class="ghost" type="button">예시 데이터로 연습</button>
+      <button id="btnCsv" type="button">CSV 내려받기</button>
+      <button id="btnPrint" type="button">인쇄 / PDF</button>
+      <button id="btnReset" class="danger ghost" type="button">전체 지우기</button>
+    </div>
+    <div class="demo-banner" id="demoBanner" role="status">
+      <span>⚠️ 지금 보이는 값은 <b>연습용 예시(가상) 데이터</b>입니다. 실제 측정값이 아니니 보고서에 쓰지 마세요.</span>
+      <button id="btnDemoClear" class="primary" type="button">예시 지우고 내 측정 시작</button>
+    </div>
+
+    <div class="tabs" id="condTabs" role="tablist" aria-label="실험 조건"></div>
+    <p class="cond-desc" id="condDesc"></p>
+
+    <div class="card" style="padding:12px 12px 6px">
+      <div class="scroll-x">
+        <table class="entry" id="entry"></table>
+      </div>
+      <p style="font-size:13.5px;color:var(--ink2);margin:8px 4px">
+        전압은 <b>V 단위</b>로 입력합니다 (멀티미터가 mV로 표시하면 1000으로 나누기: 85 mV → 0.085). 저항값 칸은 멀티미터로 잰 <b>실제 저항값</b>으로 바꿀 수 있어요. 표준편차는 2회 이상 입력하면 계산됩니다.
+      </p>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="legend" id="legend" aria-label="그래프에 표시할 조건"></div>
+
+    <div class="grid g2">
+      <div class="chart-card">
+        <h3>I–V 곡선</h3>
+        <p class="sub">가로: 전압 V (V) · 세로: 전류 I (mA) · 테두리가 굵은 점 = MPP</p>
+        <div class="chart" id="chartIV"></div>
+      </div>
+      <div class="chart-card">
+        <h3>P–V 곡선</h3>
+        <p class="sub">가로: 전압 V (V) · 세로: 전력 P (mW) · 꼭짓점 = P<sub>max</sub></p>
+        <div class="chart" id="chartPV"></div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-top:14px">
+      <h3>조건별 최대전력 P<sub>max</sub> 비교</h3>
+      <p class="sub">막대 끝 숫자: P<sub>max</sub> (mW)와 기준 조건 대비 변화율</p>
+      <div class="chart" id="chartBar"></div>
+    </div>
+
+    <div class="card">
+      <h3>조건별 결과 요약표</h3>
+      <div class="scroll-x">
+        <table class="tbl summary" id="summary"></table>
+      </div>
+      <p style="font-size:13.5px;color:var(--ink2);margin:8px 0 0">I<sub>sc</sub>는 입력된 가장 작은 저항에서의 전류(근삿값)입니다. FF ≈ P<sub>max</sub> ÷ (V<sub>oc</sub> × I<sub>sc</sub>). 변화율 = (조건 − 기준) ÷ 기준 × 100.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 해석 ================= -->
+<section id="think">
+  <div class="wrap">
+    <span class="sec-no">STEP 7</span>
+    <h2>결과 해석과 보고서</h2>
+    <p class="lead">그래프를 그린 것으로 끝이 아닙니다. “왜 그런 모양이 나왔는가”를 설명해야 탐구가 됩니다.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>생각해 볼 질문</h3>
+        <ol class="steps">
+          <li>MPP는 몇 Ω에서 나타났나요? 예측과 같았나요?</li>
+          <li>거리를 바꿨을 때 P<sub>max</sub>와 V<sub>oc</sub> 중 어느 쪽이 더 크게 변했나요? 왜 그럴까요?</li>
+          <li>입사각 30°, 60°의 P<sub>max</sub>는 cos θ(87%, 50%) 예상과 얼마나 맞나요? 다르다면 이유는?</li>
+          <li>25%를 가렸을 때 출력은 25%만 줄었나요? 직렬 연결로 설명해 보세요.</li>
+          <li>태양광 패널을 실제로 설치한다면 어떤 방향·각도·환경이 좋을까요? 내 데이터를 근거로 제안해 보세요.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>오차의 원인 찾기</h3>
+        <ul class="clean">
+          <li>광원 밝기가 고르지 않음, 주변 조명(창문·형광등)의 영향</li>
+          <li>거리·각도를 맞출 때의 오차</li>
+          <li>저항의 허용오차 (표시값과 실제값의 차이)</li>
+          <li>광원 열로 태양전지 온도 상승 → 전압 감소</li>
+          <li>집게 접촉저항, 연결이 흔들림</li>
+        </ul>
+        <p style="font-size:15px;color:var(--ink2)">3회 측정의 <b>표준편차</b>가 큰 점은 접촉 문제일 가능성이 큽니다. 다시 잰 값은 원래 값과 함께 기록해 두세요(지우지 않기).</p>
+        <h3 style="margin-top:14px">심화·후속 탐구</h3>
+        <ul class="clean" style="font-size:15px">
+          <li>광다이오드의 어두울 때/밝을 때 I–V 곡선 비교</li>
+          <li>태양전지 직렬·병렬 연결과 부분 음영</li>
+          <li>온도에 따른 V<sub>oc</sub>·P<sub>max</sub> 변화</li>
+          <li>아두이노로 간이 MPPT(최대전력점 추종) 만들기</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>보고서에 넣을 것</h3>
+      <ul class="clean">
+        <li>실험 조건(거리, 각도, 음영)과 회로도</li>
+        <li>측정 원자료 표 — 위 도구의 <b>CSV 내려받기</b>로 받아 스프레드시트에서 열 수 있어요</li>
+        <li>조건별 I–V·P–V 그래프(겹쳐 그리기)와 P<sub>max</sub> 비교 막대그래프 — <b>인쇄 / PDF</b>로 저장 가능</li>
+        <li>V<sub>oc</sub>, I<sub>sc</sub>, V<sub>mp</sub>, I<sub>mp</sub>, P<sub>max</sub>(, FF)와 조건별 변화율</li>
+        <li>예측과 결과의 비교, 오차 원인, 최적 설치·운용 조건 제안</li>
+      </ul>
+      <p style="font-size:15px;color:var(--ink2)">결과물(탐구보고서·활동기록보고서·포스터)의 양식과 제출 방법·기한은 수업에서 안내한 내용을 따르세요.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">태양전지 I–V·P–V 곡선 측정과 최대전력점(MPP) 분석 실험 안내 · 입력 데이터는 서버로 전송되지 않고 이 브라우저에만 저장됩니다.</div>
+</footer>
+
+<div class="tip-box" id="tip" role="tooltip"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- 설정 ---------- */
+var R_NOMINAL = [10000,4700,2200,1000,470,220,100,47,22,10];
+var CONDS = [
+  {id:'base',  name:'기준 (20 cm · 0°)', short:'기준',       color:'#2a78d6', desc:'거리 20 cm, 입사각 0°. 실험 1의 기준 조건이며 실험 2·3에서 20 cm / 0° 데이터로도 사용합니다.'},
+  {id:'d10',   name:'거리 10 cm',        short:'거리 10 cm', color:'#eb6834', desc:'입사각 0° 고정, 광원 거리만 10 cm로 줄입니다. (실험 2)'},
+  {id:'d30',   name:'거리 30 cm',        short:'거리 30 cm', color:'#1baf7a', desc:'입사각 0° 고정, 광원 거리만 30 cm로 늘립니다. (실험 2)'},
+  {id:'a30',   name:'입사각 30°',        short:'입사각 30°', color:'#eda100', desc:'거리 20 cm 고정, 태양전지를 30° 돌립니다. (실험 3)'},
+  {id:'a60',   name:'입사각 60°',        short:'입사각 60°', color:'#e87ba4', desc:'거리 20 cm 고정, 태양전지를 60° 돌립니다. (실험 3)'},
+  {id:'shade', name:'25% 음영',          short:'25% 음영',   color:'#008300', desc:'거리 20 cm · 입사각 0°에서 면적의 약 25%를 가립니다. (선택 실험)'}
+];
+var KEY = 'solar-cell-lab-v1';
+var TRIALS = 3;
+
+/* ---------- 상태 ---------- */
+function blankCond(){
+  var v = []; for (var i=0;i<R_NOMINAL.length;i++) v.push(['','','']);
+  return {voc:['','',''], v:v};
+}
+function blankState(){
+  var s = {group:'', demo:false, r:R_NOMINAL.slice(), cond:{}, show:{}};
+  CONDS.forEach(function(c){ s.cond[c.id] = blankCond(); s.show[c.id] = true; });
+  return s;
+}
+var state = blankState();
+var active = 'base';
+var volatile = false; // ?demo=1 로 열면 저장하지 않음
+
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    var s = JSON.parse(raw), b = blankState();
+    if(typeof s.group === 'string') b.group = s.group.slice(0,30);
+    b.demo = !!s.demo;
+    if(Array.isArray(s.r)) for(var i=0;i<R_NOMINAL.length;i++){ var rv = Number(s.r[i]); if(isFinite(rv) && rv>0) b.r[i]=rv; }
+    CONDS.forEach(function(c){
+      var src = s.cond && s.cond[c.id]; if(!src) return;
+      for(var t=0;t<TRIALS;t++) if(src.voc && src.voc[t]!=null) b.cond[c.id].voc[t] = String(src.voc[t]).slice(0,12);
+      for(var i=0;i<R_NOMINAL.length;i++) for(var t2=0;t2<TRIALS;t2++)
+        if(src.v && src.v[i] && src.v[i][t2]!=null) b.cond[c.id].v[i][t2] = String(src.v[i][t2]).slice(0,12);
+      if(s.show && s.show[c.id]===false) b.show[c.id]=false;
+    });
+    state = b;
+  }catch(e){ /* 저장소를 못 쓰는 환경이면 메모리만 사용 */ }
+}
+function save(){
+  if(volatile) return;
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+
+/* ---------- 계산 ---------- */
+function num(s){
+  if(s==null) return NaN;
+  s = String(s).trim().replace(',', '.');
+  if(s==='') return NaN;
+  var n = Number(s);
+  return isFinite(n) ? n : NaN;
+}
+function meanSd(arr){
+  var xs = arr.map(num).filter(function(x){return !isNaN(x);});
+  var n = xs.length; if(!n) return {n:0, mean:NaN, sd:NaN};
+  var m = xs.reduce(function(a,b){return a+b;},0)/n;
+  var sd = NaN;
+  if(n>=2){ var ss = xs.reduce(function(a,b){return a+(b-m)*(b-m);},0); sd = Math.sqrt(ss/(n-1)); }
+  return {n:n, mean:m, sd:sd};
+}
+function calc(id){
+  var c = state.cond[id];
+  var voc = meanSd(c.voc);
+  var rows = [], mpp = null, isc = null;
+  for(var i=0;i<R_NOMINAL.length;i++){
+    var ms = meanSd(c.v[i]), R = state.r[i];
+    var row = {i:i, R:R, n:ms.n, V:ms.mean, sd:ms.sd, I:NaN, P:NaN, flag:''};
+    if(ms.n){
+      row.I = ms.mean / R * 1000;          // mA
+      row.P = ms.mean * ms.mean / R * 1000; // mW
+      if(ms.mean < 0) row.flag = '음수: 탐침 방향 확인';
+      else if(!mpp || row.P > mpp.P) mpp = row;
+      if(!isc || R < isc.R) isc = row;
+    }
+    rows.push(row);
+  }
+  // 점검: 저항이 작아지는데 전압이 커지면 접촉 불량 가능성
+  var prev = null;
+  rows.forEach(function(r){
+    if(!r.n) return;
+    if(!r.flag){
+      if(prev && r.V > prev.V*1.03 + 0.005) r.flag = '앞 저항보다 전압이 큼 → 접촉 확인';
+      else if(voc.n && r.V > voc.mean*1.05 + 0.01) r.flag = 'Voc보다 큼 → 값 확인';
+      else if(r.n>=2 && r.V>0.02 && r.sd/r.V > 0.1) r.flag = '측정값 차이 큼 → 재측정 권장';
+    }
+    prev = r;
+  });
+  var ff = NaN;
+  if(mpp && voc.n && isc && voc.mean>0 && isc.I>0) ff = mpp.P / (voc.mean * isc.I);
+  var count = rows.filter(function(r){return r.n>0;}).length;
+  return {id:id, voc:voc, rows:rows, mpp:mpp, isc:isc, ff:ff, count:count};
+}
+
+/* ---------- 표시 형식 ---------- */
+function sig(x, d){
+  if(x==null || isNaN(x)) return '–';
+  var ax = Math.abs(x);
+  if(d==null) d = ax>=100 ? 1 : ax>=10 ? 2 : ax>=1 ? 3 : 3;
+  return x.toFixed(d);
+}
+function fmtR(R){
+  if(R>=1000){ var k = R/1000; return (Math.round(k*100)/100) + ' kΩ'; }
+  return (Math.round(R*100)/100) + ' Ω';
+}
+function esc(s){ return String(s).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];}); }
+function $(id){ return document.getElementById(id); }
+function condOf(id){ for(var i=0;i<CONDS.length;i++) if(CONDS[i].id===id) return CONDS[i]; }
+
+/* ---------- 탭 ---------- */
+function renderTabs(){
+  var h = '';
+  CONDS.forEach(function(c){
+    var n = calc(c.id).count;
+    h += '<button type="button" role="tab" data-id="'+c.id+'" aria-selected="'+(c.id===active)+'">'+
+         '<span class="dot" style="background:'+c.color+'"></span>'+esc(c.short)+
+         '<span class="cnt">'+n+'/10</span></button>';
+  });
+  $('condTabs').innerHTML = h;
+  $('condDesc').textContent = condOf(active).desc;
+}
+
+/* ---------- 입력 표 ---------- */
+function renderEntry(){
+  var c = state.cond[active];
+  var h = '<thead><tr><th style="text-align:left">부하저항 R (Ω)</th><th>1회 V</th><th>2회 V</th><th>3회 V</th>'+
+          '<th>평균 V (V)</th><th>표준편차</th><th>I = V/R (mA)</th><th>P = V²/R (mW)</th><th style="text-align:left">점검</th></tr></thead><tbody>';
+  h += '<tr class="voc"><td style="text-align:left"><b>개방전압 V<sub>oc</sub></b> <span style="color:var(--muted);font-size:12.5px">(부하 없음)</span></td>';
+  for(var t=0;t<TRIALS;t++)
+    h += '<td class="in"><input type="text" inputmode="decimal" autocomplete="off" data-k="voc" data-t="'+t+'" value="'+esc(c.voc[t])+'" aria-label="개방전압 '+(t+1)+'회"></td>';
+  h += '<td class="calc" id="c-voc-m"></td><td class="calc" id="c-voc-s"></td><td class="calc">0</td><td class="calc">0</td><td class="flag"></td></tr>';
+  for(var i=0;i<R_NOMINAL.length;i++){
+    h += '<tr id="row-'+i+'"><td class="r" style="text-align:left"><input type="text" inputmode="decimal" autocomplete="off" data-k="r" data-i="'+i+'" value="'+esc(state.r[i])+'" aria-label="저항 '+fmtR(R_NOMINAL[i])+' 실제값"> '+
+         '<span style="color:var(--muted);font-size:12.5px">'+fmtR(R_NOMINAL[i])+'</span></td>';
+    for(var t2=0;t2<TRIALS;t2++)
+      h += '<td class="in"><input type="text" inputmode="decimal" autocomplete="off" data-k="v" data-i="'+i+'" data-t="'+t2+'" value="'+esc(c.v[i][t2])+'" aria-label="'+fmtR(R_NOMINAL[i])+' 전압 '+(t2+1)+'회"></td>';
+    h += '<td class="calc" id="c-m-'+i+'"></td><td class="calc" id="c-s-'+i+'"></td><td class="calc" id="c-i-'+i+'"></td><td class="calc p" id="c-p-'+i+'"></td><td class="flag" id="c-f-'+i+'"></td></tr>';
+  }
+  h += '</tbody>';
+  $('entry').innerHTML = h;
+}
+function updateCalcCells(res){
+  $('c-voc-m').textContent = res.voc.n ? sig(res.voc.mean,3) : '';
+  $('c-voc-s').textContent = res.voc.n>=2 ? sig(res.voc.sd,3) : '';
+  res.rows.forEach(function(r){
+    var tr = $('row-'+r.i);
+    tr.className = (res.mpp && res.mpp.i===r.i) ? 'mpp' : '';
+    $('c-m-'+r.i).textContent = r.n ? sig(r.V,3) : '';
+    $('c-s-'+r.i).textContent = r.n>=2 ? sig(r.sd,3) : '';
+    $('c-i-'+r.i).textContent = r.n ? sig(r.I) : '';
+    $('c-p-'+r.i).innerHTML = r.n ? sig(r.P) + ((res.mpp && res.mpp.i===r.i) ? '<span class="badge">MPP</span>' : '') : '';
+    $('c-f-'+r.i).textContent = r.flag || '';
+  });
+}
+
+/* ---------- 요약 카드 ---------- */
+function renderStats(res){
+  function card(k, v, u, d){ return '<div class="stat"><div class="k">'+k+'</div><div class="v">'+v+(v==='–'?'':'<span class="u">'+u+'</span>')+'</div><div class="d">'+(d||'&nbsp;')+'</div></div>'; }
+  var m = res.mpp;
+  var h = '';
+  h += card('개방전압 V<sub>oc</sub>', res.voc.n?sig(res.voc.mean,3):'–', 'V', res.voc.n>=2?'± '+sig(res.voc.sd,3)+' (표준편차)':'');
+  h += card('단락전류 I<sub>sc</sub> (근사)', res.isc?sig(res.isc.I):'–', 'mA', res.isc?fmtR(res.isc.R)+'에서':'');
+  h += card('최대전력 P<sub>max</sub>', m?sig(m.P):'–', 'mW', m?'부하 '+fmtR(m.R)+'에서':'');
+  h += card('V<sub>mp</sub>', m?sig(m.V,3):'–', 'V', '');
+  h += card('I<sub>mp</sub>', m?sig(m.I):'–', 'mA', '');
+  h += card('충전율 FF (심화)', isNaN(res.ff)?'–':sig(res.ff,2), '', isNaN(res.ff)?'V<sub>oc</sub>와 10 Ω 측정 필요':'');
+  $('stats').innerHTML = h;
+}
+
+/* ---------- 범례(표시 조건 선택) ---------- */
+function renderLegend(all){
+  var h = '';
+  CONDS.forEach(function(c){
+    var has = all[c.id].count>0;
+    h += '<label class="'+(has?'':'empty')+'"><input type="checkbox" data-show="'+c.id+'" '+(state.show[c.id]?'checked':'')+' '+(has?'':'disabled')+'>'+
+         '<span class="dot" style="background:'+c.color+(has?'':';opacity:.35')+'"></span>'+esc(c.name)+(has?'':' (입력 전)')+'</label>';
+  });
+  $('legend').innerHTML = h;
+}
+
+/* ---------- 그래프 공통 ---------- */
+var NS = 'http://www.w3.org/2000/svg';
+function niceMax(v){
+  if(!(v>0)) return 1;
+  var p = Math.pow(10, Math.floor(Math.log10(v))), f = v/p;
+  var steps = [1,1.2,1.5,2,2.5,3,4,5,6,8,10];
+  for(var i=0;i<steps.length;i++) if(f<=steps[i]) return steps[i]*p;
+  return 10*p;
+}
+function tickFmt(v, max){
+  var d = max>=20 ? 0 : max>=2 ? 1 : max>=0.2 ? 2 : 3;
+  return v.toFixed(d);
+}
+var tip = $('tip');
+function showTip(html, x, y){
+  tip.innerHTML = html; tip.classList.add('on');
+  var w = tip.offsetWidth, h = tip.offsetHeight, vw = window.innerWidth;
+  var left = Math.min(Math.max(8, x + 14), vw - w - 8);
+  var top = y - h - 12; if(top < 8) top = y + 18;
+  tip.style.left = left+'px'; tip.style.top = top+'px';
+}
+function hideTip(){ tip.classList.remove('on'); }
+function bindTip(svg){
+  function handler(ev){
+    var t = ev.target.closest ? ev.target.closest('[data-tip]') : null;
+    if(!t){ hideTip(); return; }
+    var p = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+    showTip(t.getAttribute('data-tip'), p.clientX, p.clientY);
+  }
+  svg.addEventListener('mousemove', handler);
+  svg.addEventListener('mouseleave', hideTip);
+  svg.addEventListener('touchstart', handler, {passive:true});
+  svg.addEventListener('focusin', function(ev){
+    var t = ev.target; if(!t.getAttribute || !t.getAttribute('data-tip')) return;
+    var b = t.getBoundingClientRect(); showTip(t.getAttribute('data-tip'), b.left+b.width/2, b.top);
+  });
+  svg.addEventListener('focusout', hideTip);
+}
+
+/* 선 그래프: series = [{c, pts:[{x,y,tip,mpp}]}] */
+function lineChart(el, series, opt){
+  var W = Math.max(280, Math.floor(el.clientWidth || 320));
+  var H = Math.round(Math.max(240, Math.min(360, W*0.66)));
+  var m = {l:46, r:16, t:14, b:38};
+  var has = series.some(function(s){return s.pts.length>0;});
+  if(!has){ el.innerHTML = '<div class="empty-msg">측정값을 입력하면 여기에 그래프가 그려집니다.</div>'; return; }
+  var xm = 0, ym = 0;
+  series.forEach(function(s){ s.pts.forEach(function(p){ if(p.x>xm) xm=p.x; if(p.y>ym) ym=p.y; }); });
+  xm = niceMax(xm*1.02); ym = niceMax(ym*1.05);
+  var iw = W-m.l-m.r, ih = H-m.t-m.b;
+  function X(v){ return m.l + v/xm*iw; }
+  function Y(v){ return m.t + ih - v/ym*ih; }
+  var s = '<svg xmlns="'+NS+'" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="'+esc(opt.aria)+'">';
+  var n = 5, i;
+  for(i=0;i<=n;i++){
+    var yv = ym*i/n, yy = Y(yv);
+    s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+yy+'" y2="'+yy+'" stroke="'+(i===0?'#9c9a91':'#e9e7df')+'" stroke-width="1"/>';
+    s += '<text x="'+(m.l-7)+'" y="'+(yy+4)+'" font-size="11.5" text-anchor="end" fill="#6b6a63">'+tickFmt(yv,ym)+'</text>';
+    var xv = xm*i/n, xx = X(xv);
+    s += '<line x1="'+xx+'" x2="'+xx+'" y1="'+(m.t+ih)+'" y2="'+(m.t+ih+4)+'" stroke="#9c9a91"/>';
+    s += '<text x="'+xx+'" y="'+(m.t+ih+17)+'" font-size="11.5" text-anchor="middle" fill="#6b6a63">'+tickFmt(xv,xm)+'</text>';
+  }
+  s += '<text x="'+(m.l+iw/2)+'" y="'+(H-4)+'" font-size="12" text-anchor="middle" fill="#4d4c47">'+esc(opt.xLabel)+'</text>';
+  s += '<text x="'+(m.l-38)+'" y="'+(m.t-2)+'" font-size="12" fill="#4d4c47">'+esc(opt.yLabel)+'</text>';
+  // 선
+  series.forEach(function(sr){
+    if(sr.pts.length<2) return;
+    var d = sr.pts.map(function(p,k){ return (k?'L':'M')+X(p.x).toFixed(1)+' '+Y(p.y).toFixed(1); }).join(' ');
+    s += '<path d="'+d+'" fill="none" stroke="'+sr.c.color+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+  });
+  // 점
+  var labelMpp = series.filter(function(x){return x.pts.length;}).length <= 4;
+  series.forEach(function(sr){
+    sr.pts.forEach(function(p){
+      var cx = X(p.x).toFixed(1), cy = Y(p.y).toFixed(1);
+      if(p.mpp){
+        s += '<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="#fcfcfb" stroke="'+sr.c.color+'" stroke-width="2.5"/>';
+        s += '<circle cx="'+cx+'" cy="'+cy+'" r="4" fill="'+sr.c.color+'"/>';
+      } else {
+        s += '<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="'+(p.open?'#fcfcfb':sr.c.color)+'" stroke="'+(p.open?sr.c.color:'#fcfcfb')+'" stroke-width="2"/>';
+      }
+      s += '<circle cx="'+cx+'" cy="'+cy+'" r="14" fill="transparent" tabindex="0" data-tip="'+esc(p.tip)+'"/>';
+    });
+    if(opt.labelMpp && labelMpp){
+      var mp = sr.pts.filter(function(p){return p.mpp;})[0];
+      if(mp){
+        var lx = X(mp.x), ly = Y(mp.y) - 13, anchor = lx > m.l+iw*0.72 ? 'end' : (lx < m.l+iw*0.2 ? 'start' : 'middle');
+        s += '<text x="'+lx.toFixed(1)+'" y="'+Math.max(11,ly).toFixed(1)+'" font-size="11.5" font-weight="700" text-anchor="'+anchor+'" fill="#1d1d1b" paint-order="stroke" stroke="#fcfcfb" stroke-width="3">'+esc(opt.labelMpp(mp))+'</text>';
+      }
+    }
+  });
+  s += '</svg>';
+  el.innerHTML = s;
+  bindTip(el.firstChild);
+}
+
+/* 가로 막대: items=[{c,value,label,tip}] */
+function barChart(el, items){
+  if(!items.length){ el.innerHTML = '<div class="empty-msg">두 가지 이상의 조건을 측정하면 P<sub>max</sub>를 비교할 수 있어요.</div>'; return; }
+  var W = Math.max(280, Math.floor(el.clientWidth || 320));
+  var labelW = Math.min(118, Math.round(W*0.3)), valW = Math.min(150, Math.round(W*0.36));
+  var rowH = 34, barH = 18, top = 6;
+  var H = top + items.length*rowH + 6;
+  var max = niceMax(Math.max.apply(null, items.map(function(d){return d.value;})));
+  var iw = W - labelW - valW;
+  var s = '<svg xmlns="'+NS+'" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="조건별 최대전력 막대그래프">';
+  s += '<line x1="'+labelW+'" x2="'+labelW+'" y1="'+top+'" y2="'+(H-6)+'" stroke="#9c9a91"/>';
+  items.forEach(function(d, k){
+    var y = top + k*rowH + (rowH-barH)/2, w = Math.max(2, d.value/max*iw), r = Math.min(4, w/2);
+    s += '<text x="'+(labelW-8)+'" y="'+(y+barH/2+4)+'" font-size="12.5" text-anchor="end" fill="#1d1d1b">'+esc(d.c.short)+'</text>';
+    s += '<path d="M'+labelW+' '+y+' h'+(w-r).toFixed(1)+' a'+r+' '+r+' 0 0 1 '+r+' '+r+' v'+(barH-2*r)+' a'+r+' '+r+' 0 0 1 -'+r+' '+r+' h-'+(w-r).toFixed(1)+' z" fill="'+d.c.color+'"/>';
+    s += '<text x="'+(labelW+w+8).toFixed(1)+'" y="'+(y+barH/2+4)+'" font-size="12.5" fill="#1d1d1b" font-weight="700">'+esc(d.label)+'</text>';
+    s += '<rect x="0" y="'+(top+k*rowH)+'" width="'+W+'" height="'+rowH+'" fill="transparent" tabindex="0" data-tip="'+esc(d.tip)+'"/>';
+  });
+  s += '</svg>';
+  el.innerHTML = s;
+  bindTip(el.firstChild);
+}
+
+/* ---------- 그래프·요약 렌더 ---------- */
+function pct(v, base){ if(!(base>0) || isNaN(v)) return NaN; return (v-base)/base*100; }
+function pctTxt(p){ if(isNaN(p)) return ''; return (p>=0?'+':'−') + Math.abs(p).toFixed(1) + '%'; }
+
+function renderCharts(all){
+  var ivS = [], pvS = [], bars = [];
+  var base = all.base.mpp ? all.base.mpp.P : NaN;
+  CONDS.forEach(function(c){
+    var res = all[c.id];
+    if(!res.count) return;
+    if(res.mpp){
+      var p = c.id==='base' ? NaN : pct(res.mpp.P, base);
+      bars.push({c:c, value:res.mpp.P,
+        label: sig(res.mpp.P)+' mW' + (c.id==='base' ? ' (기준)' : (isNaN(p)?'':'  '+pctTxt(p))),
+        tip:'<b>'+esc(c.name)+'</b>Pmax '+sig(res.mpp.P)+' mW<br>Vmp '+sig(res.mpp.V,3)+' V · Imp '+sig(res.mpp.I)+' mA<br>부하 '+fmtR(res.mpp.R)+(isNaN(p)?'':'<br>기준 대비 '+pctTxt(p))});
+    }
+    if(!state.show[c.id]) return;
+    var iv = [], pv = [];
+    res.rows.forEach(function(r){
+      if(!r.n || r.V<0) return;
+      var isM = res.mpp && res.mpp.i===r.i;
+      var t = '<b>'+esc(c.name)+(isM?' · MPP':'')+'</b>R '+fmtR(r.R)+'<br>V '+sig(r.V,3)+' V<br>I '+sig(r.I)+' mA<br>P '+sig(r.P)+' mW';
+      iv.push({x:r.V, y:r.I, tip:t, mpp:isM, P:r.P});
+      pv.push({x:r.V, y:r.P, tip:t, mpp:isM, P:r.P});
+    });
+    if(res.voc.n && res.voc.mean>0){
+      var tv = '<b>'+esc(c.name)+' · 개방</b>Voc '+sig(res.voc.mean,3)+' V<br>I 0 mA · P 0 mW';
+      iv.push({x:res.voc.mean, y:0, tip:tv, open:true});
+      pv.push({x:res.voc.mean, y:0, tip:tv, open:true});
+    }
+    function byX(a,b){ return a.x-b.x || b.y-a.y; }
+    iv.sort(byX); pv.sort(byX);
+    ivS.push({c:c, pts:iv}); pvS.push({c:c, pts:pv});
+  });
+  lineChart($('chartIV'), ivS, {xLabel:'전압 V (V)', yLabel:'I (mA)', aria:'I–V 곡선'});
+  lineChart($('chartPV'), pvS, {xLabel:'전압 V (V)', yLabel:'P (mW)', aria:'P–V 곡선', labelMpp:function(p){ return 'Pmax '+sig(p.P)+' mW'; }});
+  barChart($('chartBar'), bars);
+}
+
+function renderSummary(all){
+  var base = all.base;
+  var h = '<thead><tr><th>조건</th><th class="num">V<sub>oc</sub> (V)</th><th class="num">I<sub>sc</sub> (mA)</th><th class="num">V<sub>mp</sub> (V)</th><th class="num">I<sub>mp</sub> (mA)</th><th class="num">P<sub>max</sub> (mW)</th><th class="num">MPP 부하</th><th class="num">FF</th><th class="num">P<sub>max</sub> 변화율</th><th class="num">V<sub>oc</sub> 변화율</th></tr></thead><tbody>';
+  CONDS.forEach(function(c){
+    var r = all[c.id], m = r.mpp;
+    var dp = (c.id!=='base' && m && base.mpp) ? pct(m.P, base.mpp.P) : NaN;
+    var dv = (c.id!=='base' && r.voc.n && base.voc.n) ? pct(r.voc.mean, base.voc.mean) : NaN;
+    function cls(p){ return isNaN(p)?'':(p>=0?' pos':' neg'); }
+    h += '<tr><td><span class="dot" style="background:'+c.color+'"></span> '+esc(c.name)+'</td>'+
+      '<td class="num">'+(r.voc.n?sig(r.voc.mean,3):'–')+'</td>'+
+      '<td class="num">'+(r.isc?sig(r.isc.I):'–')+'</td>'+
+      '<td class="num">'+(m?sig(m.V,3):'–')+'</td>'+
+      '<td class="num">'+(m?sig(m.I):'–')+'</td>'+
+      '<td class="num"><b>'+(m?sig(m.P):'–')+'</b></td>'+
+      '<td class="num">'+(m?fmtR(m.R):'–')+'</td>'+
+      '<td class="num">'+(isNaN(r.ff)?'–':sig(r.ff,2))+'</td>'+
+      '<td class="num'+cls(dp)+'">'+(c.id==='base'?'기준':(isNaN(dp)?'–':pctTxt(dp)))+'</td>'+
+      '<td class="num'+cls(dv)+'">'+(c.id==='base'?'기준':(isNaN(dv)?'–':pctTxt(dv)))+'</td></tr>';
+  });
+  $('summary').innerHTML = h + '</tbody>';
+}
+
+function calcAll(){ var all = {}; CONDS.forEach(function(c){ all[c.id] = calc(c.id); }); return all; }
+
+function refresh(full){
+  var all = calcAll();
+  if(full){ renderTabs(); renderEntry(); }
+  else {
+    // 탭의 입력 개수만 갱신
+    var btns = $('condTabs').querySelectorAll('button');
+    for(var i=0;i<btns.length;i++){ var id = btns[i].getAttribute('data-id'); btns[i].querySelector('.cnt').textContent = all[id].count+'/10'; }
+  }
+  updateCalcCells(all[active]);
+  renderStats(all[active]);
+  renderLegend(all);
+  renderCharts(all);
+  renderSummary(all);
+  $('demoBanner').classList.toggle('on', !!state.demo);
+}
+
+/* ---------- 예시(가상) 데이터 ---------- */
+function demoData(){
+  // 단일 다이오드 모형으로 만든 가상 값 (실제 측정값 아님)
+  var a = 0.26, vocBase = 2.75, iphBase = 0.0092; // V, V, A
+  var scale = {base:1, d10:2.5, d30:0.52, a30:0.86, a60:0.47, shade:0.42};
+  var seed = 7; function rnd(){ seed = (seed*1103515245 + 12345) % 2147483648; return seed/2147483648; }
+  var s = blankState();
+  CONDS.forEach(function(c){
+    var iph = iphBase*scale[c.id];
+    var i0 = iphBase/(Math.exp(vocBase/a)-1);
+    var voc = a*Math.log(iph/i0+1);
+    function solve(R){
+      var lo=0, hi=voc;
+      for(var k=0;k<60;k++){ var mid=(lo+hi)/2; var f = iph - i0*(Math.exp(mid/a)-1) - mid/R; if(f>0) lo=mid; else hi=mid; }
+      return (lo+hi)/2;
+    }
+    for(var t=0;t<TRIALS;t++) s.cond[c.id].voc[t] = (voc*(1+(rnd()-0.5)*0.012)).toFixed(3);
+    for(var i=0;i<R_NOMINAL.length;i++){
+      var v = solve(R_NOMINAL[i]);
+      for(var t2=0;t2<TRIALS;t2++) s.cond[c.id].v[i][t2] = (v*(1+(rnd()-0.5)*0.024)).toFixed(3);
+    }
+  });
+  s.demo = true; s.group = state.group;
+  return s;
+}
+function hasData(){
+  return CONDS.some(function(c){
+    var d = state.cond[c.id];
+    return d.voc.some(function(x){return String(x).trim()!=='';}) || d.v.some(function(r){return r.some(function(x){return String(x).trim()!=='';});});
+  });
+}
+
+/* ---------- CSV ---------- */
+function csv(){
+  var all = calcAll(), L = [];
+  function q(x){ x = String(x==null?'':x); return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }
+  function f(x,d){ return isNaN(x) ? '' : x.toFixed(d); }
+  if(state.demo) L.push('※ 연습용 예시(가상) 데이터 — 실제 측정값 아님');
+  L.push(['조', state.group].map(q).join(','));
+  L.push('');
+  L.push(['조건','부하저항(Ω)','V 1회(V)','V 2회(V)','V 3회(V)','평균 V(V)','표준편차(V)','I(mA)','P(mW)','비고'].join(','));
+  CONDS.forEach(function(c){
+    var r = all[c.id], d = state.cond[c.id];
+    if(!r.count && !r.voc.n) return;
+    L.push([c.name,'개방(Voc)',d.voc[0],d.voc[1],d.voc[2],f(r.voc.mean,4),f(r.voc.sd,4),'0','0',''].map(q).join(','));
+    r.rows.forEach(function(row){
+      L.push([c.name,row.R,d.v[row.i][0],d.v[row.i][1],d.v[row.i][2],f(row.V,4),f(row.sd,4),f(row.I,4),f(row.P,4),
+        ((r.mpp&&r.mpp.i===row.i)?'MPP ':'')+(row.flag||'')].map(q).join(','));
+    });
+  });
+  L.push('');
+  L.push(['조건','Voc(V)','Isc 근사(mA)','Vmp(V)','Imp(mA)','Pmax(mW)','MPP 부하(Ω)','FF','Pmax 변화율(%)'].join(','));
+  CONDS.forEach(function(c){
+    var r = all[c.id], m = r.mpp; if(!m && !r.voc.n) return;
+    var dp = (c.id!=='base' && m && all.base.mpp) ? pct(m.P, all.base.mpp.P) : NaN;
+    L.push([c.name,f(r.voc.mean,4),r.isc?f(r.isc.I,4):'',m?f(m.V,4):'',m?f(m.I,4):'',m?f(m.P,4):'',m?m.R:'',f(r.ff,3),f(dp,1)].map(q).join(','));
+  });
+  return '﻿' + L.join('\r\n');
+}
+function download(name, text){
+  var blob = new Blob([text], {type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+/* ---------- 이벤트 ---------- */
+$('condTabs').addEventListener('click', function(ev){
+  var b = ev.target.closest('button'); if(!b) return;
+  active = b.getAttribute('data-id'); refresh(true);
+});
+$('entry').addEventListener('input', function(ev){
+  var el = ev.target, k = el.getAttribute('data-k'); if(!k) return;
+  var c = state.cond[active];
+  if(k==='voc') c.voc[+el.getAttribute('data-t')] = el.value;
+  else if(k==='v') c.v[+el.getAttribute('data-i')][+el.getAttribute('data-t')] = el.value;
+  else if(k==='r'){ var rv = num(el.value); if(rv>0) state.r[+el.getAttribute('data-i')] = rv; else return; }
+  save(); refresh(false);
+});
+$('entry').addEventListener('keydown', function(ev){
+  if(ev.key!=='Enter') return;
+  var ins = Array.prototype.slice.call($('entry').querySelectorAll('input[data-k="v"],input[data-k="voc"]'));
+  var idx = ins.indexOf(ev.target); if(idx>=0 && ins[idx+1]){ ev.preventDefault(); ins[idx+1].focus(); ins[idx+1].select(); }
+});
+$('entry').addEventListener('change', function(ev){
+  var el = ev.target;
+  if(el.getAttribute('data-k')==='r' && !(num(el.value)>0)) el.value = state.r[+el.getAttribute('data-i')];
+});
+$('legend').addEventListener('change', function(ev){
+  var id = ev.target.getAttribute('data-show'); if(!id) return;
+  state.show[id] = ev.target.checked; save(); refresh(false);
+});
+$('groupName').addEventListener('input', function(ev){ state.group = ev.target.value; save(); });
+$('btnDemo').addEventListener('click', function(){
+  if(hasData() && !state.demo && !confirm('입력한 측정값이 예시 데이터로 바뀝니다. 필요하면 먼저 CSV로 내려받으세요. 계속할까요?')) return;
+  state = demoData(); save(); refresh(true);
+});
+function clearAll(){
+  var g = state.group; state = blankState(); state.group = g; active = 'base'; save(); refresh(true);
+}
+$('btnDemoClear').addEventListener('click', clearAll);
+$('btnReset').addEventListener('click', function(){
+  if(hasData() && !confirm('모든 조건의 입력값을 지웁니다. 되돌릴 수 없어요. 계속할까요?')) return;
+  clearAll();
+});
+$('btnCsv').addEventListener('click', function(){
+  var g = (state.group||'').replace(/[^\w가-힣-]+/g,'_');
+  download('태양전지_측정값' + (g?'_'+g:'') + '.csv', csv());
+});
+$('btnPrint').addEventListener('click', function(){ window.print(); });
+var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ renderCharts(calcAll()); }, 120); });
+window.addEventListener('scroll', hideTip, {passive:true});
+
+/* ---------- 시작 ---------- */
+if(/[?&]demo=1/.test(location.search)){ volatile = true; state = demoData(); }
+else load();
+$('groupName').value = state.group;
+refresh(true);
+})();
+</script>
+</body>
+</html>
